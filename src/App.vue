@@ -1,6 +1,7 @@
 <template>
   <section class="main">
     <div class="floating-menu">
+     
       <button class="button" @click="saveAsTemplate">Save as template</button>
       <button
         @click="getDataFromLocalStorage"
@@ -20,7 +21,8 @@
           <button class="remove" @click="removeItem(index)">X</button>
         </summary>
         <div class="content">
-          <textarea type="text" v-model="item.content"></textarea>
+           <Tiptap @tiptap-change="item.content = $event" />
+          <!-- <textarea type="text" v-model="item.content"></textarea> -->
           <button class="addInner" @click="addInner(index)">Add Inner</button>
 
           <div class="inner" v-if="item.additional.length > 0">
@@ -37,7 +39,8 @@
                 </button>
               </summary>
               <div class="content">
-                <textarea type="text" v-model="innerItem.content"></textarea>
+                 <Tiptap @tiptap-change="innerItem.content = $event" />
+                <!-- <textarea type="text" v-model="innerItem.content"></textarea> -->
               </div>
             </details>
           </div>
@@ -48,7 +51,7 @@
       <details v-for="(item, index) in faq" :key="index">
         <summary>{{ item.title }}</summary>
         <div class="content">
-          {{ item.content }}
+          <div class="margin-bt-15" v-html="item.content"></div>
 
           <div class="inner" v-if="item.additional.length > 0">
             <details
@@ -56,7 +59,7 @@
               :key="innerIndex"
             >
               <summary>{{ innerItem.title }} <button>Remove</button></summary>
-              <div class="content">{{ innerItem.content }}</div>
+              <div class="content" v-html="innerItem.content"></div>
             </details>
           </div>
         </div>
@@ -67,6 +70,7 @@
 
 <script>
 import { useToast } from "vue-toastification";
+import Tiptap from './components/Tiptap.vue'
 export default {
   data() {
     return {
@@ -75,6 +79,9 @@ export default {
       },
       faq: [],
     };
+  },
+  components : {
+    Tiptap
   },
   mounted() {
     this.getDataFromLocalStorage();
@@ -162,7 +169,7 @@ details {
 }
 details summary {
   background: black;
-
+  cursor: pointer;
   color: white;
   padding: 1rem;
   position: relative;
@@ -244,6 +251,10 @@ textarea {
   margin-bottom: 15px;
 }
 
+.addInner{
+ top: 25px;
+}
+
 .addInner:hover,
 .add:hover {
   background: black;
@@ -286,5 +297,9 @@ textarea {
 .floating-menu .active {
   background: black;
   color: white;
+}
+
+.margin-bt-15{
+  margin-bottom: 15px;
 }
 </style>
