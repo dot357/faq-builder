@@ -1,7 +1,7 @@
 <template>
   <section class="main">
     <div class="floating-menu">
-     
+      <button class="button" @click="exportToHTML">Export to HTML</button>
       <button class="button" @click="saveAsTemplate">Save as template</button>
       <button
         @click="getDataFromLocalStorage"
@@ -21,7 +21,7 @@
           <button class="remove" @click="removeItem(index)">X</button>
         </summary>
         <div class="content">
-           <Tiptap @tiptap-change="item.content = $event" />
+          <Tiptap @tiptap-change="item.content = $event" />
           <!-- <textarea type="text" v-model="item.content"></textarea> -->
           <button class="addInner" @click="addInner(index)">Add Inner</button>
 
@@ -39,7 +39,7 @@
                 </button>
               </summary>
               <div class="content">
-                 <Tiptap @tiptap-change="innerItem.content = $event" />
+                <Tiptap @tiptap-change="innerItem.content = $event" />
                 <!-- <textarea type="text" v-model="innerItem.content"></textarea> -->
               </div>
             </details>
@@ -70,7 +70,7 @@
 
 <script>
 import { useToast } from "vue-toastification";
-import Tiptap from './components/Tiptap.vue'
+import Tiptap from "./components/Tiptap.vue";
 export default {
   data() {
     return {
@@ -80,8 +80,8 @@ export default {
       faq: [],
     };
   },
-  components : {
-    Tiptap
+  components: {
+    Tiptap,
   },
   mounted() {
     this.getDataFromLocalStorage();
@@ -130,9 +130,23 @@ export default {
       );
     },
     exportToHTML() {
-      let HTML = `
-      
-      `;
+      let HTML;
+
+      this.$nextTick(() => {
+        HTML = document.querySelector(
+          "#app > section > div.right-side"
+        ).innerHTML;
+
+        const regex = new RegExp(/(data-v-[0-9])\w+(="")/g);
+        // console.log(HTML.match(regex))
+        HTML = HTML.replaceAll(regex, "");
+        navigator.clipboard.writeText(HTML)
+
+         const toast = useToast();
+          toast.success("Copied successfuly", {
+            timeout: 2000,
+          });
+      });
     },
     saveAsTemplate() {
       localStorage.setItem("template", JSON.stringify(this.faq));
@@ -251,8 +265,8 @@ textarea {
   margin-bottom: 15px;
 }
 
-.addInner{
- top: 25px;
+.addInner {
+  top: 25px;
 }
 
 .addInner:hover,
@@ -262,7 +276,7 @@ textarea {
 }
 
 .floating-menu {
-  position: absolute;
+  position: fixed;
   width: 250px;
 
   padding: 1rem !important;
@@ -271,6 +285,7 @@ textarea {
   gap: 13px;
   bottom: 2rem;
   right: 2rem;
+  z-index: 99;
 }
 .floating-menu .button {
   background: white;
@@ -297,9 +312,10 @@ textarea {
 .floating-menu .active {
   background: black;
   color: white;
+  box-shadow: 0px 0px 25px 0px rgba(255, 255, 255, 0.293);
 }
 
-.margin-bt-15{
+.margin-bt-15 {
   margin-bottom: 15px;
 }
 </style>
