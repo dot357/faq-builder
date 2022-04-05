@@ -17,7 +17,8 @@
       <button class="add" @click="addMore">Add</button>
       <details v-for="(item, index) in faq" :key="index">
         <summary>
-          <input type="text" v-model="item.title" />
+           <Tiptap @tiptap-change="item.title = $event" />
+          <!-- <input type="text" v-model="item.title" /> -->
           <button class="remove" @click="removeItem(index)">X</button>
         </summary>
         <div class="content">
@@ -49,7 +50,7 @@
     </div>
     <div class="right-side">
       <details v-for="(item, index) in faq" :key="index">
-        <summary>{{ item.title }}</summary>
+        <summary v-html="item.title "></summary>
         <div class="content">
           <div class="margin-bt-15" v-html="item.content"></div>
 

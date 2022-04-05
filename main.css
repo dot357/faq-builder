@@ -64,7 +64,8 @@ em{
 	font-style : italic;
 }
 .ProseMirror {
-    min-height:150px;
+    min-height:25px;
+	height: auto;
     border: 2px solid rgba(0, 0, 0, 0.151);
     border-radius: 4px;
     padding: 1rem;
