@@ -2,6 +2,22 @@
   <section>
       <div class="menu">
     <button
+      @click="editor.commands.insertContent('<h1>Edit this H1</h1>')" 
+    >
+    H1
+    </button>
+
+     <button
+      @click="editor.commands.insertContent('<h2>Edit this H2</h2>')" 
+    >
+    H2
+    </button>
+    <button
+      @click="editor.commands.insertContent('<h3>Edit this H3</h3>')" 
+    >
+    H3
+    </button>
+    <button
       @click="editor.chain().focus().toggleBold().run()"
       
     >
@@ -94,6 +110,7 @@ button:hover{
     transition: all 0.3s ease-in;
     background: black;
     color: white;
+    border: 1px solid white;
 }
 </style>
 

@@ -31,8 +31,9 @@
               v-for="(innerItem, innerIndex) in item.additional"
               :key="innerIndex"
             >
-              <summary>
-                <input type="text" v-model="innerItem.title" /><button
+              <summary class="inner-summary">
+                 <Tiptap @tiptap-change="innerItem.title = $event" />
+                <button
                   class="remove"
                   @click="removeInner(index, innerIndex)"
                 >
@@ -59,7 +60,7 @@
               v-for="(innerItem, innerIndex) in item.additional"
               :key="innerIndex"
             >
-              <summary>{{ innerItem.title }} </summary>
+              <summary v-html="innerItem.title"></summary>
               <div class="content" v-html="innerItem.content"></div>
             </details>
           </div>
@@ -318,5 +319,9 @@ textarea {
 
 .margin-bt-15 {
   margin-bottom: 15px;
+}
+
+.inner-summary{
+  background: rgb(74, 74, 74);
 }
 </style>
