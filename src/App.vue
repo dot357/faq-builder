@@ -58,7 +58,7 @@
               v-for="(innerItem, innerIndex) in item.additional"
               :key="innerIndex"
             >
-              <summary>{{ innerItem.title }} <button>Remove</button></summary>
+              <summary>{{ innerItem.title }} </summary>
               <div class="content" v-html="innerItem.content"></div>
             </details>
           </div>
