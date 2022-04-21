@@ -1,10 +1,11 @@
 <template>
-  <section>
+  <section >
+
       <div class="menu">
     <button
       @click="editor.commands.insertContent('<h1>Edit this H1</h1>')" 
     >
-    H1
+    H1    
     </button>
 
      <button
@@ -27,7 +28,7 @@
       @click="editor.chain().focus().toggleItalic().run()"
       
     >
-      italic
+      italic 
     </button>
     <button
       @click="editor.chain().focus().toggleStrike().run()"
@@ -37,6 +38,7 @@
     </button>
   </div>
 
+ 
   <editor-content
     :editor="editor"
     @input="change"
@@ -62,6 +64,12 @@ export default {
       editor: null,
     };
   },
+  props : {
+    placeHolderText : {
+      type : String,
+      default : 'Please edit this area'
+    }
+  },
   methods: {
     change() {
       this.$emit("tiptap-change", this.editor.getHTML());
@@ -69,8 +77,8 @@ export default {
   },
 
   mounted() {
-    this.editor = new Editor({
-      content: "<p>This is an html editor. 🎉</p>",
+    this.editor = new Editor({ 
+      content: `<p>${this.placeHolderText} 🎉</p>`,
       extensions: [
         StarterKit,
         

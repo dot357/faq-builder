@@ -1,6 +1,14 @@
 <template>
   <section class="main">
-    <div class="floating-menu">
+    <Importhtml
+      v-if="show.importHTML"
+      @close-modal="show.importHTML = $event"
+      @event-import="startImport($event)"
+    />
+    <div
+      class="floating-menu"
+      :style="{ zIndex: !show.importHTML ? '99' : '-1' }"
+    >
       <button class="button" @click="exportToHTML">Export to HTML</button>
       <button class="button" @click="saveAsTemplate">Save as template</button>
       <button
@@ -11,18 +19,27 @@
       >
         Load from template
       </button>
+      <button class="button" @click="show.importHTML = !show.importHTML">
+        Import from HTML
+      </button>
     </div>
     <!-- <img alt="Vue logo" src="./assets/logo.png" /> -->
     <div class="left-side">
       <button class="add" @click="addMore">Add</button>
       <details v-for="(item, index) in faq" :key="index">
         <summary>
-           <Tiptap @tiptap-change="item.title = $event" />
+          <Tiptap
+            @tiptap-change="item.title = $event"
+            :placeHolderText="item.title"
+          />
           <!-- <input type="text" v-model="item.title" /> -->
           <button class="remove" @click="removeItem(index)">X</button>
         </summary>
         <div class="content">
-          <Tiptap @tiptap-change="item.content = $event" />
+          <Tiptap
+            @tiptap-change="item.content = $event"
+            :placeHolderText="item.content"
+          />
           <!-- <textarea type="text" v-model="item.content"></textarea> -->
           <button class="addInner" @click="addInner(index)">Add Inner</button>
 
@@ -32,16 +49,19 @@
               :key="innerIndex"
             >
               <summary class="inner-summary">
-                 <Tiptap @tiptap-change="innerItem.title = $event" />
-                <button
-                  class="remove"
-                  @click="removeInner(index, innerIndex)"
-                >
+                <Tiptap
+                  @tiptap-change="innerItem.title = $event"
+                  :placeHolderText="innerItem.title"
+                />
+                <button class="remove" @click="removeInner(index, innerIndex)">
                   X
                 </button>
               </summary>
               <div class="content">
-                <Tiptap @tiptap-change="innerItem.content = $event" />
+                <Tiptap
+                  @tiptap-change="innerItem.content = $event"
+                  :placeHolderText="innerItem.content"
+                />
                 <!-- <textarea type="text" v-model="innerItem.content"></textarea> -->
               </div>
             </details>
@@ -51,7 +71,7 @@
     </div>
     <div class="right-side">
       <details v-for="(item, index) in faq" :key="index">
-        <summary v-html="item.title "></summary>
+        <summary v-html="item.title"></summary>
         <div class="content">
           <div class="margin-bt-15" v-html="item.content"></div>
 
@@ -73,17 +93,20 @@
 <script>
 import { useToast } from "vue-toastification";
 import Tiptap from "./components/Tiptap.vue";
+import Importhtml from "./components/Importhtml.vue";
 export default {
   data() {
     return {
       show: {
         load: false,
+        importHTML: false,
       },
       faq: [],
     };
   },
   components: {
     Tiptap,
+    Importhtml,
   },
   mounted() {
     this.getDataFromLocalStorage();
@@ -142,12 +165,12 @@ export default {
         const regex = new RegExp(/(data-v-[0-9])\w+(="")/g);
         // console.log(HTML.match(regex))
         HTML = HTML.replaceAll(regex, "");
-        navigator.clipboard.writeText(HTML)
+        navigator.clipboard.writeText(HTML);
 
-         const toast = useToast();
-          toast.success("Copied successfuly", {
-            timeout: 2000,
-          });
+        const toast = useToast();
+        toast.success("Copied successfuly", {
+          timeout: 2000,
+        });
       });
     },
     saveAsTemplate() {
@@ -157,6 +180,31 @@ export default {
       toast.success("Save successful", {
         timeout: 2000,
       });
+    },
+    startImport($event) {
+      this.faq = $event;
+      this.show.importHTML = false;
+      const toast = useToast();
+      if (this.faq) {
+        toast.success("Import successful", {
+          timeout: 2000,
+        });
+        } else {
+        toast.error("An Error happened.", {
+          timeout: 2000,
+        });
+      }
+    },
+  },
+  watch: {
+    "show.importHTML"(newValue) {
+      newValue
+        ? this.$nextTick(() => {
+            document.querySelector("body").style.overflow = "hidden";
+          })
+        : this.$nextTick(() => {
+            document.querySelector("body").style.overflow = "auto";
+          });
     },
   },
 };
@@ -321,7 +369,7 @@ textarea {
   margin-bottom: 15px;
 }
 
-.inner-summary{
+.inner-summary {
   background: rgb(74, 74, 74);
 }
 </style>
