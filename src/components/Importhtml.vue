@@ -35,10 +35,10 @@ export default {
         let push;
         let additional = [];
 
-        console.log(element.firstChild.textContent);
+        console.log(element.firstChild.innerHTML);
         push = {
-          title: element.firstChild.textContent,
-          content: element.lastChild.firstChild.textContent,
+          title: element.firstChild.innerHTML,
+          content: element.lastChild.firstChild.innerHTML,
           additional: null,
           // additional => Array
           //content : text
@@ -51,8 +51,8 @@ export default {
 
         innerDetails.forEach((innerItem) => {
           additional.push({
-            title: innerItem.firstChild.textContent,
-            content: innerItem.lastChild.textContent,
+            title: innerItem.firstChild.innerHTML,
+            content: innerItem.lastChild.innerHTML,
           });
         });
         push.additional = additional;
