@@ -36,6 +36,12 @@
     >
       strike
     </button>
+
+    <button
+      @click="editor.commands.insertContent('<br>')" 
+    >
+    Line break    
+    </button>
   </div>
 
  
