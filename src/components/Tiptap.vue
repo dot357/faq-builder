@@ -58,11 +58,13 @@
 
 <script>
 import { Editor, EditorContent } from "@tiptap/vue-3";
+import Link from '@tiptap/extension-link'
 import StarterKit from "@tiptap/starter-kit";
 
 export default {
   components: {
     EditorContent,
+    Link
   },
 
   data() {
@@ -87,6 +89,7 @@ export default {
       content: `<p>${this.placeHolderText} 🎉</p>`,
       extensions: [
         StarterKit,
+        Link
         
       ],
     });
